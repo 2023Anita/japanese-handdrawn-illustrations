@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Japanese Handdrawn Illustrations</title>
+  <meta name="description" content="A Codex skill for turning Chinese articles into consistent Japanese hand-drawn editorial illustrations.">
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #24211f;
+      --muted: #6f6760;
+      --line: #e6ddd2;
+      --paper: #fffaf1;
+      --paper-2: #f7efe2;
+      --blue: #dbeaf0;
+      --green: #dce8d5;
+      --pink: #f3dddc;
+      --orange: #f4ddbd;
+      --white: #fffdf8;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--paper);
+      line-height: 1.6;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      min-height: 100vh;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 250, 241, 0.92);
+      backdrop-filter: blur(12px);
+    }
+
+    .topbar-inner {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 180px;
+    }
+
+    .brand strong {
+      font-size: 15px;
+      letter-spacing: 0;
+    }
+
+    .brand span {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .language-switcher {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .language-switcher button {
+      min-height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--ink);
+      padding: 6px 10px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .language-switcher button[aria-pressed="true"] {
+      background: var(--ink);
+      color: var(--white);
+      border-color: var(--ink);
+    }
+
+    .hero {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(320px, 0.92fr);
+      gap: 40px;
+      align-items: center;
+      padding: 56px 0 36px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      width: fit-content;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: var(--white);
+      color: var(--muted);
+      padding: 6px 12px;
+      font-size: 13px;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 780px;
+      font-size: clamp(36px, 6vw, 76px);
+      line-height: 0.96;
+      letter-spacing: 0;
+    }
+
+    .lead {
+      max-width: 660px;
+      margin: 22px 0 0;
+      color: var(--muted);
+      font-size: clamp(17px, 2vw, 21px);
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      border-radius: 999px;
+      padding: 10px 16px;
+      border: 1px solid var(--ink);
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    .button.primary {
+      background: var(--ink);
+      color: var(--white);
+    }
+
+    .button.secondary {
+      background: var(--white);
+    }
+
+    .hero-figure {
+      margin: 0;
+    }
+
+    .hero-figure img {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+    }
+
+    .section {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0;
+    }
+
+    .section h2 {
+      margin: 0 0 14px;
+      font-size: clamp(26px, 3vw, 40px);
+      letter-spacing: 0;
+    }
+
+    .section-intro {
+      max-width: 760px;
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 17px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .feature {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 18px;
+      background: var(--white);
+    }
+
+    .feature h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+    }
+
+    .feature p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .gallery figure {
+      margin: 0;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      overflow: hidden;
+      background: var(--white);
+    }
+
+    .gallery img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+    }
+
+    .gallery figcaption {
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .workflow {
+      display: grid;
+      grid-template-columns: 0.9fr 1.1fr;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .workflow img {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+    }
+
+    .steps {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 10px;
+    }
+
+    .steps li {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      padding: 14px 16px;
+    }
+
+    .install {
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      background: var(--white);
+      padding: 18px;
+      overflow-x: auto;
+    }
+
+    code,
+    pre {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+    }
+
+    pre {
+      margin: 0;
+      white-space: pre-wrap;
+    }
+
+    footer {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 34px 0 48px;
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+    }
+
+    @media (max-width: 820px) {
+      .topbar-inner,
+      .hero,
+      .workflow {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar-inner {
+        align-items: flex-start;
+      }
+
+      .hero {
+        padding-top: 34px;
+      }
+
+      .feature-grid,
+      .gallery {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand">
+          <strong>Japanese Handdrawn Illustrations</strong>
+          <span data-i18n="brandSubtitle">Codex skill for article illustrations</span>
+        </div>
+        <nav class="language-switcher" aria-label="Language">
+          <button type="button" data-lang="en" aria-pressed="true">🇬🇧 English</button>
+          <button type="button" data-lang="zh" aria-pressed="false">🇨🇳 中文</button>
+          <button type="button" data-lang="ja" aria-pressed="false">🇯🇵 日本語</button>
+          <button type="button" data-lang="fr" aria-pressed="false">🇫🇷 Français</button>
+          <button type="button" data-lang="ko" aria-pressed="false">🇰🇷 한국어</button>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero">
+        <div>
+          <div class="eyebrow" data-i18n="eyebrow">Reusable Codex Skill · Quiet visual system</div>
+          <h1 data-i18n="heroTitle">Turn Chinese articles into gentle Japanese hand-drawn illustrations.</h1>
+          <p class="lead" data-i18n="heroLead">A structured Codex skill that packages style DNA, a recurring traveler character, composition patterns, prompt templates, and QA rules.</p>
+          <div class="actions">
+            <a class="button primary" href="https://github.com/2023Anita/japanese-handdrawn-illustrations" data-i18n="githubButton">View on GitHub</a>
+            <a class="button secondary" href="../README.md" data-i18n="readmeButton">Read README</a>
+          </div>
+        </div>
+        <figure class="hero-figure">
+          <img src="../assets/demo/01-skill-workroom.png" alt="Handdrawn workroom illustration">
+        </figure>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="whyTitle">Why it works</h2>
+        <p class="section-intro" data-i18n="whyIntro">Most AI image prompts are fragile. This project turns a fragile prompt into a maintainable illustration system.</p>
+        <div class="feature-grid">
+          <article class="feature">
+            <h3 data-i18n="featureOneTitle">Style DNA</h3>
+            <p data-i18n="featureOneBody">Clear rules for background, line weight, color, whitespace, labels, and what to avoid.</p>
+          </article>
+          <article class="feature">
+            <h3 data-i18n="featureTwoTitle">Character IP</h3>
+            <p data-i18n="featureTwoBody">The quiet traveler, 小旅人, performs the core action instead of decorating the scene.</p>
+          </article>
+          <article class="feature">
+            <h3 data-i18n="featureThreeTitle">QA Guardrail</h3>
+            <p data-i18n="featureThreeBody">A checklist catches anime drift, PPT-like diagrams, clutter, unreadable text, and overdone colors.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="galleryTitle">Demo images</h2>
+        <p class="section-intro" data-i18n="galleryIntro">The images are generated as project illustrations and README assets.</p>
+        <div class="gallery">
+          <figure>
+            <img src="../assets/demo/01-skill-workroom.png" alt="Skill workroom">
+            <figcaption data-i18n="captionOne">Skill system</figcaption>
+          </figure>
+          <figure>
+            <img src="../assets/demo/02-content-to-image-workflow.png" alt="Content workflow">
+            <figcaption data-i18n="captionTwo">Content to image workflow</figcaption>
+          </figure>
+          <figure>
+            <img src="../assets/demo/03-prompt-system-cards.png" alt="Prompt cards">
+            <figcaption data-i18n="captionThree">Prompt system cards</figcaption>
+          </figure>
+          <figure>
+            <img src="../assets/demo/04-qa-umbrella.png" alt="QA umbrella">
+            <figcaption data-i18n="captionFour">QA guardrail</figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="workflowTitle">Workflow</h2>
+        <div class="workflow">
+          <img src="../assets/demo/02-content-to-image-workflow.png" alt="Workflow illustration">
+          <ol class="steps">
+            <li data-i18n="stepOne">Read the article and identify cognitive anchors.</li>
+            <li data-i18n="stepTwo">Create a short shot list instead of illustrating every paragraph.</li>
+            <li data-i18n="stepThree">Generate each image as a standalone 16:9 illustration.</li>
+            <li data-i18n="stepFour">Use the QA checklist to avoid style drift and clutter.</li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="section">
+        <h2 data-i18n="installTitle">Install</h2>
+        <div class="install">
+          <pre><code>cp -R "skills/japanese-handdrawn-illustrations" "$HOME/.codex/skills/"</code></pre>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span data-i18n="footerText">Fork it, replace the character, rewrite the style DNA, and build your own illustration skill.</span>
+    </footer>
+  </div>
+
+  <script>
+    const translations = {
+      en: {
+        brandSubtitle: "Codex skill for article illustrations",
+        eyebrow: "Reusable Codex Skill · Quiet visual system",
+        heroTitle: "Turn Chinese articles into gentle Japanese hand-drawn illustrations.",
+        heroLead: "A structured Codex skill that packages style DNA, a recurring traveler character, composition patterns, prompt templates, and QA rules.",
+        githubButton: "View on GitHub",
+        readmeButton: "Read README",
+        whyTitle: "Why it works",
+        whyIntro: "Most AI image prompts are fragile. This project turns a fragile prompt into a maintainable illustration system.",
+        featureOneTitle: "Style DNA",
+        featureOneBody: "Clear rules for background, line weight, color, whitespace, labels, and what to avoid.",
+        featureTwoTitle: "Character IP",
+        featureTwoBody: "The quiet traveler, 小旅人, performs the core action instead of decorating the scene.",
+        featureThreeTitle: "QA Guardrail",
+        featureThreeBody: "A checklist catches anime drift, PPT-like diagrams, clutter, unreadable text, and overdone colors.",
+        galleryTitle: "Demo images",
+        galleryIntro: "The images are generated as project illustrations and README assets.",
+        captionOne: "Skill system",
+        captionTwo: "Content to image workflow",
+        captionThree: "Prompt system cards",
+        captionFour: "QA guardrail",
+        workflowTitle: "Workflow",
+        stepOne: "Read the article and identify cognitive anchors.",
+        stepTwo: "Create a short shot list instead of illustrating every paragraph.",
+        stepThree: "Generate each image as a standalone 16:9 illustration.",
+        stepFour: "Use the QA checklist to avoid style drift and clutter.",
+        installTitle: "Install",
+        footerText: "Fork it, replace the character, rewrite the style DNA, and build your own illustration skill."
+      },
+      zh: {
+        brandSubtitle: "面向正文配图的 Codex Skill",
+        eyebrow: "可复用 Codex Skill · 安静视觉系统",
+        heroTitle: "把中文文章变成温柔的日式手绘正文配图。",
+        heroLead: "一套结构化 Codex Skill，把风格 DNA、固定角色“小旅人”、构图模式、提示词模板和 QA 规则打包成可复用工作流。",
+        githubButton: "查看 GitHub",
+        readmeButton: "阅读 README",
+        whyTitle: "为什么有效",
+        whyIntro: "大多数 AI 生图 prompt 都很脆弱。这个项目把一次性 prompt 变成可维护的配图系统。",
+        featureOneTitle: "风格 DNA",
+        featureOneBody: "明确背景、线条、颜色、留白、标注和禁忌，减少风格漂移。",
+        featureTwoTitle: "角色 IP",
+        featureTwoBody: "安静的小旅人参与核心动作，而不是站在画面旁边当装饰。",
+        featureThreeTitle: "QA 防护",
+        featureThreeBody: "用检查清单拦住日漫跑偏、PPT 化、画面太满、文字不可读和颜色过重。",
+        galleryTitle: "示例配图",
+        galleryIntro: "这些图作为项目说明图和 README 资产生成。",
+        captionOne: "Skill 系统",
+        captionTwo: "从正文到配图",
+        captionThree: "Prompt 卡片",
+        captionFour: "QA 防护",
+        workflowTitle: "工作流",
+        stepOne: "阅读正文，识别值得配图的认知锚点。",
+        stepTwo: "先做 shot list，而不是每段都平均配图。",
+        stepThree: "每张图独立生成 16:9 横版正文插图。",
+        stepFour: "用 QA 清单避免风格跑偏和画面过载。",
+        installTitle: "安装",
+        footerText: "Fork 它，替换角色，重写风格 DNA，就能做出自己的配图 skill。"
+      },
+      ja: {
+        brandSubtitle: "記事挿絵のための Codex Skill",
+        eyebrow: "再利用可能な Codex Skill · 静かなビジュアルシステム",
+        heroTitle: "中国語の記事を、やさしい日本風手描き挿絵に変える。",
+        heroLead: "スタイル DNA、旅人キャラクター、構図パターン、プロンプトテンプレート、QA ルールをまとめた構造化 Codex Skill です。",
+        githubButton: "GitHub で見る",
+        readmeButton: "README を読む",
+        whyTitle: "なぜ機能するのか",
+        whyIntro: "多くの AI 画像プロンプトは壊れやすいものです。このプロジェクトはそれを保守できる挿絵システムに変えます。",
+        featureOneTitle: "Style DNA",
+        featureOneBody: "背景、線、色、余白、ラベル、避けるべき表現を明確にします。",
+        featureTwoTitle: "キャラクター IP",
+        featureTwoBody: "静かな旅人「小旅人」が、飾りではなく中心の動作を担います。",
+        featureThreeTitle: "QA ガードレール",
+        featureThreeBody: "アニメ調、PPT 風、詰め込みすぎ、読みにくい文字、強すぎる色をチェックします。",
+        galleryTitle: "デモ画像",
+        galleryIntro: "これらの画像はプロジェクト説明と README アセットとして生成されています。",
+        captionOne: "Skill システム",
+        captionTwo: "本文から挿絵へ",
+        captionThree: "Prompt カード",
+        captionFour: "QA ガードレール",
+        workflowTitle: "ワークフロー",
+        stepOne: "記事を読み、挿絵にすべき認知的な要点を見つけます。",
+        stepTwo: "すべての段落ではなく、短い shot list を作ります。",
+        stepThree: "各画像を 16:9 の独立した挿絵として生成します。",
+        stepFour: "QA チェックリストでスタイルのぶれと過密を防ぎます。",
+        installTitle: "インストール",
+        footerText: "Fork して、キャラクターを替え、style DNA を書き換えれば、自分だけの挿絵 skill を作れます。"
+      },
+      fr: {
+        brandSubtitle: "Codex Skill pour illustrations d'articles",
+        eyebrow: "Codex Skill réutilisable · Système visuel calme",
+        heroTitle: "Transformez des articles chinois en illustrations japonaises dessinées à la main.",
+        heroLead: "Un Codex Skill structuré qui regroupe ADN de style, personnage récurrent, compositions, templates de prompts et règles de QA.",
+        githubButton: "Voir sur GitHub",
+        readmeButton: "Lire le README",
+        whyTitle: "Pourquoi ça fonctionne",
+        whyIntro: "La plupart des prompts d'images IA sont fragiles. Ce projet les transforme en un système d'illustration maintenable.",
+        featureOneTitle: "ADN de style",
+        featureOneBody: "Des règles claires pour le fond, le trait, les couleurs, les espaces, les labels et les interdits.",
+        featureTwoTitle: "Personnage IP",
+        featureTwoBody: "Le voyageur calme, 小旅人, accomplit l'action centrale au lieu de décorer la scène.",
+        featureThreeTitle: "Garde-fou QA",
+        featureThreeBody: "Une checklist évite les dérives anime, les diagrammes PPT, la surcharge, les textes illisibles et les couleurs excessives.",
+        galleryTitle: "Images de démo",
+        galleryIntro: "Ces images servent d'illustrations de projet et d'assets pour le README.",
+        captionOne: "Système du skill",
+        captionTwo: "Du contenu à l'image",
+        captionThree: "Cartes de prompt",
+        captionFour: "Garde-fou QA",
+        workflowTitle: "Workflow",
+        stepOne: "Lire l'article et identifier les points cognitifs importants.",
+        stepTwo: "Créer une courte shot list au lieu d'illustrer chaque paragraphe.",
+        stepThree: "Générer chaque image comme une illustration 16:9 indépendante.",
+        stepFour: "Utiliser la checklist QA pour éviter les dérives et la surcharge.",
+        installTitle: "Installation",
+        footerText: "Forkez-le, remplacez le personnage, réécrivez le style DNA et créez votre propre skill d'illustration."
+      },
+      ko: {
+        brandSubtitle: "기사 삽화를 위한 Codex Skill",
+        eyebrow: "재사용 가능한 Codex Skill · 조용한 시각 시스템",
+        heroTitle: "중국어 글을 부드러운 일본식 손그림 삽화로 바꾸세요.",
+        heroLead: "스타일 DNA, 반복 캐릭터, 구도 패턴, 프롬프트 템플릿, QA 규칙을 묶은 구조화된 Codex Skill입니다.",
+        githubButton: "GitHub에서 보기",
+        readmeButton: "README 읽기",
+        whyTitle: "왜 효과적인가",
+        whyIntro: "대부분의 AI 이미지 프롬프트는 쉽게 흔들립니다. 이 프로젝트는 그것을 유지보수 가능한 삽화 시스템으로 바꿉니다.",
+        featureOneTitle: "Style DNA",
+        featureOneBody: "배경, 선, 색, 여백, 라벨, 피해야 할 표현을 명확히 정합니다.",
+        featureTwoTitle: "캐릭터 IP",
+        featureTwoBody: "조용한 여행자 小旅人이 장식이 아니라 핵심 행동을 수행합니다.",
+        featureThreeTitle: "QA 가드레일",
+        featureThreeBody: "애니풍, PPT식 도식, 과밀한 화면, 읽기 어려운 글자, 과한 색을 점검합니다.",
+        galleryTitle: "데모 이미지",
+        galleryIntro: "이 이미지는 프로젝트 설명과 README 자산으로 생성되었습니다.",
+        captionOne: "Skill 시스템",
+        captionTwo: "본문에서 이미지로",
+        captionThree: "Prompt 카드",
+        captionFour: "QA 가드레일",
+        workflowTitle: "워크플로",
+        stepOne: "글을 읽고 삽화로 만들 핵심 인지 지점을 찾습니다.",
+        stepTwo: "모든 문단이 아니라 짧은 shot list를 만듭니다.",
+        stepThree: "각 이미지를 독립적인 16:9 삽화로 생성합니다.",
+        stepFour: "QA 체크리스트로 스타일 이탈과 과밀함을 막습니다.",
+        installTitle: "설치",
+        footerText: "Fork한 뒤 캐릭터를 바꾸고 style DNA를 다시 쓰면 자신만의 삽화 skill을 만들 수 있습니다."
+      }
+    };
+
+    const buttons = document.querySelectorAll("[data-lang]");
+    const nodes = document.querySelectorAll("[data-i18n]");
+
+    function setLanguage(lang) {
+      const dictionary = translations[lang] || translations.en;
+      document.documentElement.lang = lang;
+      nodes.forEach((node) => {
+        const key = node.dataset.i18n;
+        if (dictionary[key]) {
+          node.textContent = dictionary[key];
+        }
+      });
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === lang));
+      });
+      const url = new URL(window.location.href);
+      url.searchParams.set("lang", lang);
+      window.history.replaceState({}, "", url);
+    }
+
+    const initial = new URLSearchParams(window.location.search).get("lang") || "en";
+    setLanguage(translations[initial] ? initial : "en");
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    });
+  </script>
+</body>
+</html>

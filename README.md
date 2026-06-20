@@ -1,10 +1,30 @@
 # Japanese Handdrawn Illustrations
 
+<p align="center">
+  <a href="README.md">🇬🇧 English</a> ·
+  <a href="docs/README.zh-CN.md">🇨🇳 简体中文</a> ·
+  <a href="docs/README.ja.md">🇯🇵 日本語</a> ·
+  <a href="docs/README.fr.md">🇫🇷 Français</a> ·
+  <a href="docs/README.ko.md">🇰🇷 한국어</a>
+</p>
+
+<p align="center">
+  <strong>One-click multilingual showcase:</strong>
+  <a href="https://2023anita.github.io/japanese-handdrawn-illustrations/">open the live translation page</a>
+</p>
+
 ![Japanese handdrawn illustration skill workroom](assets/demo/01-skill-workroom.png)
 
 A Codex skill for turning Chinese articles, notes, teaching materials, and workflow documents into quiet Japanese editorial-style hand-drawn illustrations.
 
 Instead of using a single mega prompt, this project packages a reusable visual workflow: style DNA, a recurring character, composition patterns, prompt templates, and QA rules.
+
+## Multilingual Experience
+
+GitHub README files cannot run JavaScript, so this repository provides two translation layers:
+
+- **README language links**: click a flag above to open the translated README.
+- **Live showcase page**: use the GitHub Pages page for instant in-page language switching.
 
 ## Why This Project
 
